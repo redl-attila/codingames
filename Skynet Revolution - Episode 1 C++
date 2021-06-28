@@ -1,0 +1,122 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <list> 
+#include <iterator> 
+#include <sstream>
+
+using namespace std;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+
+int main()
+{
+    int N; // the total number of nodes in the level, including the gateways
+    int L; // the number of links
+    int E; // the number of exit gateways
+    cin >> N >> L >> E; cin.ignore();
+    cerr<<"N: "<<N<<"; L: "<<L<<"; E: "<<E<<endl;
+    
+    /*std::vector<std::vector<int>> Skynet;
+     
+    for(int i=0; i<N;i++){
+        std::vector<int> temp={}; ;
+        Skynet.push_back(temp);
+    }*/
+    typedef std::vector<int> Links;
+    typedef std::map<int, std::vector<int>> MyMap;
+    MyMap Skynet;
+    Skynet[N]=Links();
+    //std::map<std::int, std::vector<int>>::iterator it;
+    
+    for (int i = 0; i < L; i++) {
+        int N1; // N1 and N2 defines a link between these nodes
+        int N2;
+        cin >> N1 >> N2; cin.ignore();
+        Skynet[N1].push_back(N2);
+        //cerr<<"ok"<<endl;
+        Skynet[N2].push_back(N1);
+        
+    }
+    
+    std::vector<int> Gateways;
+    
+    cerr<<"Exits:";
+    
+    for (int i = 0; i < E; i++) {
+        int EI; // the index of a gateway node
+        cin >> EI; cin.ignore();
+        Gateways.push_back(EI);
+        cerr<<" "<<EI;
+    }
+    cerr<<endl;
+    // game loop
+    while (1) {
+        int SI; // The index of the node on which the Skynet agent is positioned this turn
+        cin >> SI; cin.ignore();
+        bool gateway_found=false;
+        
+        bool *visited = new bool[N]; 
+        for(int i = 0; i < N; i++) 
+            visited[i] = false;
+        visited[SI]=true;
+        
+        std::vector <int> queue;
+        
+        
+        
+        
+        for(std::vector<int>::iterator it=Skynet[SI].begin() ; it<Skynet[SI].end(); it++){
+            queue.push_back(SI);
+            queue.push_back(*it);
+            visited[*it]==true;
+        }
+        while(!gateway_found){
+            
+            for(int j=0;j<Gateways.size();j++){
+                
+                if(queue[1] == Gateways[j]){
+                    gateway_found=true;
+                    cout<< queue[0]<<" "<<queue[1]<<endl;
+                    
+                    std::vector<int>::iterator del=find(Skynet[queue[1]].begin(), Skynet[queue[1]].end(), queue[0]);
+                    Skynet[queue[1]].erase(del);
+                    del=find(Skynet[queue[0]].begin(), Skynet[queue[0]].end(), queue[1]);
+                    Skynet[queue[0]].erase(del);
+                    
+                    
+                    
+                }
+            }
+            if(gateway_found==false){
+                for(std::vector<int>::iterator it=Skynet[queue[1]].begin() ; it<Skynet[queue[1]].end(); it++){
+                    if(visited[*it]==false){
+                        queue.push_back(queue[1]);
+                        queue.push_back(*it);
+                        visited[*it]==true;
+                    }
+                }
+                
+                queue.erase(queue.begin());
+                queue.erase(queue.begin());
+            }
+            //élek törlése:
+            
+            // cout + iterator to erase
+            
+        }
+        // Write an action using cout. DON'T FORGET THE "<< endl"
+        // To debug: cerr << "Debug messages..." << endl;
+
+
+        // Example: 0 1 are the indices of the nodes you wish to sever the link between
+        //cout << "1 2" << endl;
+    
+    }
+    
+}
