@@ -1,0 +1,60 @@
+using System;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player
+{
+    static void Main(string[] args)
+    {
+        string[] inputs;
+        inputs = Console.ReadLine().Split(' ');
+        int W = int.Parse(inputs[0]); // width of the building.
+        int H = int.Parse(inputs[1]); // height of the building.
+        int N = int.Parse(Console.ReadLine()); // maximum number of turns before game over.
+        inputs = Console.ReadLine().Split(' ');
+        double X0 = (double)int.Parse(inputs[0]);
+        double Y0 = (double)int.Parse(inputs[1]);
+
+        double minX = 0;
+        double minY = 0;
+        double maxX = W;
+        double maxY = H;
+        // game loop
+        while (true)
+        {
+            
+            string bombDir = Console.ReadLine(); // the direction of the bombs from batman's current location (U, UR, R, DR, D, DL, L or UL)
+            //Console.Error.WriteLine(bombDir);
+            //Console.Error.WriteLine("minX: {0}  maxX: {1}  minY: {2}  maxY: {3}  X0: {4}  Y0: {5}", minX, maxX, minY, maxY, X0, Y0);
+            if(bombDir.Contains('R')){
+                minX=X0;
+                X0 = X0+Math.Ceiling((maxX-X0)/2);                
+            }
+            if(bombDir.Contains('D')){
+                minY=Y0;
+                Y0= Y0+Math.Ceiling((maxY-Y0)/2);
+            }
+            if(bombDir.Contains('L')){
+                maxX=X0;
+                X0= X0-Math.Ceiling((X0-minX)/2);
+            }
+            if(bombDir.Contains('U')){
+                maxY=Y0;
+                Y0= Y0-Math.Ceiling((Y0-minY)/2);
+            }
+            // Write an action using Console.WriteLine()
+            // To debug: Console.Error.WriteLine("Debug messages...");
+
+            //Console.Error.WriteLine("minX: {0}  maxX: {1}  minY: {2}  maxY: {3}  X0: {4}  Y0: {5}", minX, maxX, minY, maxY, X0, Y0);
+            // the location of the next window Batman should jump to.
+            Console.WriteLine("{0} {1}", (int)X0,(int)Y0);
+        }
+    }
+}
