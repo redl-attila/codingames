@@ -1,0 +1,51 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+
+int main()
+{
+    int L;
+    cin >> L; cin.ignore();
+    int H;
+    cin >> H; cin.ignore();
+    string T;
+    getline(cin, T);
+    vector <string> Alpha;
+    for (int i = 0; i < H; i++) {
+        string ROW;
+        getline(cin, ROW);
+        
+        cerr<<"ROW: "<<ROW<<endl;
+        Alpha.push_back(ROW);
+    }
+    
+    string Output[H];
+    
+    for(int i=0; i<T.length();i++){
+        //cerr<<T.length()<<endl;
+        for(int h=0; h<H;h++){
+            //cerr<<(int(T[i])-65)*L<<endl;
+            if(int(T[i])>64 && int(T[i])<91){
+                Output[h].append(Alpha[h],(int(T[i])-65)*L,L);
+            }
+            else if(int(T[i])>96 && int(T[i])<123){
+                Output[h].append(Alpha[h],(int(T[i])-97)*L,L);
+            }
+            else
+                Output[h].append(Alpha[h],26*L,L);
+        }
+    }
+    // Write an action using cout. DON'T FORGET THE "<< endl"
+    //cerr<<endl;
+    for(int h=0;h<H;h++)
+        cout<<Output[h]<<endl;
+    //cout << Alpha[0][1] << endl;
+}
