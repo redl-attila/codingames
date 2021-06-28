@@ -1,0 +1,73 @@
+using System;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+
+/**
+ * Don't let the machines win. You are humanity's last hope...
+ **/
+class Player
+{
+    static void Main(string[] args)
+    {
+        int width = int.Parse(Console.ReadLine()); // the number of cells on the X axis
+        int height = int.Parse(Console.ReadLine()); // the number of cells on the Y axis
+
+        Console.Error.WriteLine("width: " + width + "  height: "+ height);
+        string [] lines = new  string [height]; 
+        for (int i = 0; i < height; i++)
+        {
+            lines [i] = Console.ReadLine(); // width characters, each either 0 or .
+            Console.Error.WriteLine(lines[i]);
+        }
+
+
+        // Write an action using Console.WriteLine()
+        // To debug: Console.Error.WriteLine("Debug messages...");
+        for(int h=0; h<height; h++){
+            for(int w=0; w<width; w++){
+                //Console.Error.WriteLine(h);
+                if(lines[h][w]=='0'){
+                    Console.Write(w+" "+h );
+                    Console.Error.WriteLine("Debug messages1...  h: "+h+ " ;"+lines[h][w]);
+                    if(w == width-1 || lines[h].Substring(w+1).Contains('0') == false){
+                        Console.Write(" -1 -1");
+                        Console.Error.WriteLine("Debug messages...2");
+                    }
+                    else{
+                        Console.Write(" "+lines[h].IndexOf('0',w+1) + " " + h); 
+                        Console.Error.WriteLine("Debug messages...3");
+                    }
+                    if(h==height-1){
+                        Console.WriteLine(" -1 -1");
+                        Console.Error.WriteLine("Debug messages...4");
+                    }
+                    else{
+                        bool Found =false;
+                        for(int i=h+1; i<height;i++){
+                            if(lines[i][w] == '0'){
+                                Console.WriteLine(" "+ w + " " + i);
+                                Console.Error.WriteLine("Debug messages...5");
+                                Found=true;
+                                break;
+                            }
+                        }
+                        if(Found==false){
+                            Console.WriteLine(" -1 -1");
+                            Console.Error.WriteLine("Debug messages...6");
+                        }
+                        
+                    }
+                }
+                
+            }
+
+
+        }
+
+        // Three coordinates: a node, its right neighbor, its bottom neighbor
+        //Console.WriteLine("0 0 1 0 0 1");
+    }
+}
