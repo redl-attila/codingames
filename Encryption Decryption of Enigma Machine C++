@@ -1,0 +1,111 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+
+int main()
+{
+    string Operation;
+    getline(cin, Operation);
+    int pseudoRandomNumber;
+    cin >> pseudoRandomNumber; cin.ignore();
+    cerr<<"pseudoRandomNumber: "<<pseudoRandomNumber<<endl;
+    
+    vector <std::string> Rotor;
+    
+    for (int i = 0; i < 3; i++) {
+        string rotor;
+        getline(cin, rotor);
+        cerr<<"rotor "<<i<<" "<<rotor<<endl;
+        Rotor.push_back(rotor);
+    }
+    string message;
+    
+    getline(cin, message);
+    cerr<<"message: "<<message<<endl;
+    cerr<<message.length()<<endl;
+    // Write an action using cout. DON'T FORGET THE "<< endl"
+    // To debug: cerr << "Debug messages..." << endl;
+    
+    //--------------------ENCODE--------------------------------------------------
+    if(Operation=="ENCODE"){
+        
+        string ShiftedMessage;
+        for(int i=0; i<message.length();i++){
+            if(int(message[i])+pseudoRandomNumber >90){
+                ShiftedMessage.push_back(int(message[i])+pseudoRandomNumber-26);
+            }
+            else{
+                ShiftedMessage.push_back(int(message[i])+pseudoRandomNumber);
+                //cerr<<(int(message[i])+pseudoRandomNumber)<<endl;
+            }
+            
+            if(pseudoRandomNumber==25)
+                pseudoRandomNumber=0;
+            else 
+                pseudoRandomNumber++;
+        }
+        cerr<<ShiftedMessage<<endl;
+        
+        for(int i=0; i<3;i++){
+            for(int k=0; k<ShiftedMessage.length();k++){
+                ShiftedMessage.replace(k,1,Rotor[i],(int(ShiftedMessage[k])-65),1);
+            }
+            cerr<<ShiftedMessage<<endl;
+        }
+        cout << ShiftedMessage << endl;
+    }
+    
+    
+    //------------------DECODE----------------------------------------------
+    else{
+        string ShiftedMessage=message;
+        cerr<<"Message: "<<ShiftedMessage<<endl;
+        for(int i=2; i>=0;i--){
+            for(int k=0; k<ShiftedMessage.length();k++){
+                char y=(Rotor[i].find(ShiftedMessage[k]))+65;
+                string c;
+                c.push_back(y);
+                ShiftedMessage.replace(k,1,c,0,1);
+            }
+            cerr<<ShiftedMessage<<endl;
+        }
+        string DecodedMessage;
+        pseudoRandomNumber=pseudoRandomNumber+message.length()-1;
+        while(pseudoRandomNumber>25){
+            pseudoRandomNumber=pseudoRandomNumber-26;
+        }
+        
+        for(int i=ShiftedMessage.length()-1; i>=0;i--){
+            if(int(ShiftedMessage[i])-pseudoRandomNumber <65){
+                DecodedMessage.push_back(int(ShiftedMessage[i])-pseudoRandomNumber+26);
+            }
+            else{
+                DecodedMessage.push_back(int(ShiftedMessage[i])-pseudoRandomNumber);
+                //cerr<<(int(message[i])+pseudoRandomNumber)<<endl;
+            }
+            
+            if(pseudoRandomNumber==0)
+                pseudoRandomNumber=25;
+            else 
+                pseudoRandomNumber--;
+        }
+        std::reverse(DecodedMessage.begin(),DecodedMessage.end());
+        //cerr<<DecodedMessage<<endl;    1 0 25
+        
+        
+        cout << DecodedMessage << endl;
+        
+    }
+    
+    
+    
+    
+}
