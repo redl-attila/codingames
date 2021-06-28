@@ -1,0 +1,95 @@
+using System;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+namespace Chuck_Norris
+{
+    class Solution
+    {
+        static void Main(string[] args)
+        {
+            string MESSAGE = Console.ReadLine();
+
+            System.Text.StringBuilder binary_message = new System.Text.StringBuilder();
+
+            for (int i = 0; i < MESSAGE.Length; i++)
+            {
+                string binary = Convert.ToString(Convert.ToInt32(MESSAGE[i]), 2);
+                if(binary.Length == 7)
+                {
+                    binary_message.Append(binary);
+                }
+                else
+                {
+                    binary_message.Append('0');
+                    binary_message.Append(binary);
+                }
+                
+                Console.Error.WriteLine(MESSAGE[i]);
+                Console.Error.WriteLine(Convert.ToInt16(MESSAGE[i]));
+                Console.Error.WriteLine(binary_message);
+            }
+
+            System.Text.StringBuilder result = new System.Text.StringBuilder();
+            for (int n = 0; n < binary_message.Length; n++)
+            {
+                
+                int temp = n;
+                Console.Error.WriteLine(n);
+                if (binary_message[n] == '1')
+                {
+                    if (n == binary_message.Length - 1)
+                    {
+                        result.Append("0 0");
+                    }
+                    else
+                    {
+                        int count = 1;
+
+                        while (n + count < binary_message.Length && binary_message[n] == binary_message[n + count])
+                        {
+                            count++;
+                            temp++;
+                        }
+                        result.Append("0 ");
+                        for (int w = 0; w < count; w++)
+                            result.Append('0');
+                        if (temp != binary_message.Length - 1)
+                            result.Append(' ');
+                    }
+                }
+                else
+                {
+                    if (n == binary_message.Length - 1)
+                        result.Append("00 0");
+                    else
+                    {
+                        int count = 1;
+                        while (n + count < binary_message.Length && binary_message[n] == binary_message[n + count])
+                        {
+                            count++;
+                            temp++;
+                        }
+
+
+
+                        result.Append("00 ");
+                        for (int w = 0; w < count; w++)
+                            result.Append('0');
+                        if (temp != binary_message.Length - 1)
+                            result.Append(' ');
+
+                    }
+                }
+                n = temp;
+                Console.Error.WriteLine(result);
+            }
+            result.Append("\n"); ;
+            
+            Console.WriteLine(result);
+
+        }
+    }
+}
