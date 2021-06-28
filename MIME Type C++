@@ -1,0 +1,97 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <sstream>
+#include <iterator>
+#include <unordered_map>
+
+
+
+using namespace std;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+
+template <class Container>
+void split2(const std::string& str, Container& cont, char delim = '.')
+{
+    std::stringstream ss(str);
+    std::string token;
+    while (std::getline(ss, token, delim)) {
+        cont.push_back(token);
+    }
+}
+
+
+int main()
+{
+    int N; // Number of elements which make up the association table.
+    cin >> N; cin.ignore();
+    int Q; // Number Q of file names to be analyzed.
+    cin >> Q; cin.ignore();
+    cerr<<N<<endl<<Q<<endl;
+   
+    std::unordered_map<std::string, std::string> MyMIME;
+    //cerr << "Debug messages..." << endl<<endl;
+    for (int i = 0; i < N; i++) {
+        string EXT; // file extension
+        string MT; // MIME type.
+        cin >> EXT >> MT; cin.ignore();
+        
+        
+        transform(EXT.begin(), EXT.end(), EXT.begin(), ::tolower);
+        
+        
+        
+        MyMIME.insert(std::make_pair(EXT,MT));
+        
+        
+    }
+    
+    //cerr<<endl<<"-------------------------"<<endl<<endl;
+  
+    
+    for (int i = 0; i < Q; i++) {
+        string FNAME;
+        getline(cin, FNAME); // One file name per line.
+        //cerr<<"File name: "<<FNAME<<endl;
+        if(FNAME.find('.') != std::string::npos && FNAME.back()!='.'){
+            
+            
+            
+            std::vector<std::string> results;
+ 
+            split2(FNAME, results);
+            int ext_number= results.size()-1;
+            
+            transform(results[ext_number].begin(), results[ext_number].end(), results[ext_number].begin(), ::tolower);
+            
+            
+           //cerr<<results.size()<<endl;
+            
+            std::unordered_map<std::string, std::string>::iterator it;
+            
+           
+            it = MyMIME.find(results[ext_number]);
+            
+            if(it != MyMIME.end())
+                std::cout<<it->second<<endl;
+            else
+                std::cout<<"UNKNOWN"<<endl;
+        }
+        else{
+            std::cout<<"UNKNOWN"<<endl;
+            
+        }
+    }
+
+    // Write an action using cout. DON'T FORGET THE "<< endl"
+    // To debug: cerr << "Debug messages..." << endl;
+
+
+    // For each of the Q filenames, display on a line the corresponding MIME type. If there is no corresponding type, then display UNKNOWN.
+    //cout << "UNKNOWN" << endl;
+}
