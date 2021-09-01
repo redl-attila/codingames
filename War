@@ -1,0 +1,263 @@
+using System;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Collections;
+using System.Collections.Generic;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Card{
+    private string _name;
+    private string _suit;
+    private int _value;
+
+    public string Name{
+        get => _name;
+        set => _name=value;
+    }
+    public string Suit{
+        get => _suit;
+        set => _suit=value;
+    }
+    public int Value{
+        get => _value;
+        set => _value=value;
+    }
+    public Card(string _card){
+        
+        _name=_card;
+        //Console.Error.WriteLine("name: "+_name+"  length: "+_name.Length);
+        _suit=Char.ToString(_card[1]);
+        switch (_card[0]){
+            case 'A': _value=14;
+                break;
+            case 'J': _value=11;
+                break;
+            case 'K': _value=13;
+                break;
+            case 'Q': _value=12;
+                break;
+            default: {
+                //Console.Error.WriteLine(_card.Length);
+                if(_name.Length < 3){
+                    _value= (int)char.GetNumericValue(_card[0]);
+                    }
+                else{
+                    //Console.Error.WriteLine(_card.Length+' '+_card.Substring(0,2));
+                    _value= Int32.Parse(_card.Substring(0,2));
+                    }
+                }
+                break;
+        }
+        
+        //Console.Error.WriteLine(_name);
+    }
+    public static string Fight(Card player1card, Card player2card){
+        //Console.Error.WriteLine("player1card: "+player1card.Name);
+        //Console.Error.WriteLine("player2card: "+player2card.Name);
+
+        if(player1card.Value== player2card.Value){
+            Console.Error.WriteLine("PAT in Fight");
+            return "PAT";
+        }
+        else if(player1card.Value > player2card.Value){
+            //Console.Error.WriteLine("Fight: "+player1card.Value+" "+player2card.Value);
+            return "1"; 
+        }
+        else{
+            //Console.Error.WriteLine("Fight: "+player1card.Value+" "+player2card.Value);
+            return "2";
+        }
+    }
+    public static string War(List<Card> player1cards, List<Card> player2cards, List<Card> temp_player1cards, List<Card> temp_player2cards ){
+        
+        
+        if(player1cards.Count < 5 || player2cards.Count < 5){     // If there is not enough card in one of the decks
+            /*int wartime = (player1cards.Count > player2cards.Count)?player2cards.Count:player1cards.Count;
+            while(wartime!=0){
+                temp_player1cards.Add(player1cards[0]);
+                player1cards.RemoveAt(0);
+                temp_player2cards.Add(player2cards[0]);
+                player2cards.RemoveAt(0);
+                wartime--;
+            }*/
+            Console.Error.WriteLine("PAT in War");
+            return "PAT";
+        }
+        else{ 
+            //int errorcounter=1;
+            for(int i=0;i<4;i++){
+                //Console.Error.WriteLine("errorcounter: "+ errorcounter);
+                temp_player1cards.Add(player1cards[i]);
+                temp_player2cards.Add(player2cards[i]);
+                //Console.Error.WriteLine("player1cards["+i+"]: "+ player1cards[i]._name);
+                //Console.Error.WriteLine("player2cards["+i+"]: "+ player2cards[i]._name);
+                //errorcounter++;
+            }
+            player1cards.RemoveRange(0,4);
+            player2cards.RemoveRange(0,4);
+            //Console.Error.WriteLine("player1cards[0]: "+ player1cards[0]._name);
+            //Console.Error.WriteLine("player2cards[0]: "+ player2cards[0]._name);
+
+            string result= null;
+            switch (Fight(player1cards[0], player2cards[0])){
+                case "1":{temp_player1cards.Add(player1cards[0]);
+                        temp_player2cards.Add(player2cards[0]);
+                        player1cards.RemoveAt(0);
+                        player2cards.RemoveAt(0);
+                        result="1";
+                        //Console.Error.WriteLine("switch1");
+                        }
+                    break;
+                case "2":{temp_player1cards.Add(player1cards[0]);
+                        temp_player2cards.Add(player2cards[0]);
+                        player1cards.RemoveAt(0);
+                        player2cards.RemoveAt(0);
+                        result="2";
+                        //Console.Error.WriteLine("switch2");
+                        }
+                    break;
+                case "PAT":{Console.Error.WriteLine("PAT in switch");
+                        result= War(player1cards, player2cards,temp_player1cards, temp_player2cards );
+                        }
+                    break;
+                default: {Console.Error.WriteLine("Something went wrog :(");}
+                    break;
+            }
+            return result;
+        }
+    }
+    
+}
+
+
+public class Solution
+{
+    
+        //////////////////////////////////
+    public static void Main(string[] args)
+    {
+        int n = int.Parse(Console.ReadLine()); // the number of cards for player 1
+        List<Card> player1cards = new List<Card>();
+        //Console.Error.WriteLine("player1cards ");
+        for (int i = 0; i < n; i++)
+        {
+            player1cards.Add(new Card(Console.ReadLine())); // the n cards of player 1
+        }
+        int m = int.Parse(Console.ReadLine()); // the number of cards for player 2
+        List<Card> player2cards = new List<Card>();
+        Console.Error.WriteLine("player1cards\tplayer2cards");
+        for (int i = 0; i < m; i++)
+        {
+            player2cards.Add(new Card(Console.ReadLine())); // the m cards of player 2
+            Console.Error.WriteLine(player1cards[i].Name+"\t\t"+player2cards[i].Name);
+        }
+        
+        //Console.Error.WriteLine(player1cards.Count);
+        //Console.Error.WriteLine(player2cards.Count);
+
+        ////////////////////////////
+        int turncounter =0;
+        string PAT= null;
+        while(player1cards.Count != 0 && player2cards.Count != 0 && PAT==null){
+            turncounter++;
+            //Console.Error.WriteLine(turncounter);
+            //Console.Error.WriteLine(player1cards.Count);
+            //Console.Error.WriteLine(player2cards.Count);
+            switch (Card.Fight(player1cards[0], player2cards[0])){
+                case "1":{player1cards.Add(player1cards[0]);
+                        player1cards.Add(player2cards[0]);
+                        player1cards.RemoveAt(0);
+                        player2cards.RemoveAt(0);
+                        //Console.Error.WriteLine("switch1");
+                        }
+                    break;
+                case "2":{player2cards.Add(player1cards[0]);
+                        player2cards.Add(player2cards[0]);
+                        player1cards.RemoveAt(0);
+                        player2cards.RemoveAt(0);
+                        //Console.Error.WriteLine("switch2");
+                        }
+                    break;
+                case "PAT":{Console.Error.WriteLine("War");
+                        int counter= (player1cards.Count > player2cards.Count)?player1cards.Count:player2cards.Count;
+                        for(int i=0; i<counter;i++){
+                            if(i<player1cards.Count){
+                                Console.Error.Write(player1cards[i].Name+"\t");
+                            }
+                            else{
+                                Console.Error.Write("\t");
+                            }
+                            if(i<player2cards.Count){
+                                Console.Error.Write(player2cards[i].Name+"\n");
+                            }
+                            else{
+                                Console.Error.Write("\n");
+                            }
+                        }
+
+
+
+                        List<Card> temp_player1cards = new List<Card>();
+                        List<Card> temp_player2cards = new List<Card>();
+                        switch(Card.War(player1cards, player2cards, temp_player1cards, temp_player2cards)){
+                            case "1":{
+                                player1cards.AddRange(temp_player1cards);
+                                player1cards.AddRange(temp_player2cards);
+                            }
+                                break;
+                            case "2":{
+                                player2cards.AddRange(temp_player1cards);
+                                player2cards.AddRange(temp_player2cards);
+                            }
+                                break;
+                            case "PAT":{
+                                PAT="PAT";
+                            }
+                                break;
+                            default:{Console.Error.WriteLine("Something went wrong");}
+                                break;
+
+                        }
+
+                        }
+                    break;
+                default: {Console.Error.WriteLine("Something went wrog :(");}
+                    break;
+            }
+            /*if(turncounter%1==0){
+                Console.Error.Write("player1cards:");
+                foreach(Card deck in player1cards){
+                Console.Error.Write(" "+deck.Name);
+                }
+                Console.Error.Write("\nplayer2cards:");
+                foreach(Card deck in player2cards){
+                Console.Error.Write(" "+deck.Name);
+                }
+                Console.Error.Write("\n");
+            }*/
+            //Console.Error.WriteLine("player1 deck: "+player1cards.Count);
+            //Console.Error.WriteLine("player2 deck: "+player2cards.Count);
+        }
+
+
+        // Write an answer using Console.WriteLine()
+        // To debug: Console.Error.WriteLine("Debug messages...");
+        Console.Error.WriteLine("PAT: ["+PAT+"]");
+        if (PAT!=null){
+            Console.WriteLine("PAT");
+        }
+        else if(player1cards.Count == 0){
+            Console.WriteLine("2 "+turncounter);
+        }
+        else if(player2cards.Count == 0){
+            Console.WriteLine("1 "+turncounter);
+        }
+        else{
+            Console.WriteLine(" something went wrong :(");
+        }
+    }
+}
